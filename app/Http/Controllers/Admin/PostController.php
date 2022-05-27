@@ -35,7 +35,10 @@ class PostController extends Controller
         $element = Post::where('id', '>', 0);
 
         if($request->filter_title) {
-            $element->where('title', 'LIKE', "%$request->filter_title%");
+            $element->where(function ($query) use ($request) {
+                $query->where('title', 'LIKE', "%$request->filter_title%")
+                ->orwhere('content', 'LIKE', "%$request->filter_title%");
+            });
         }
 
         if($request->category) {
@@ -47,9 +50,15 @@ class PostController extends Controller
         }
         
         $element = $element->paginate(20);
+
+        //miglioramento url per il cambio della pagina
+        $query_data = $request->query();
+        unset($query_data['page']);
+        $element->withPath('?' . http_build_query($query_data, '', '&'));
+
+        //richiesta tutte categorie e user
         $categories = Category::all();
         $users = User::all();
-        //$element = Post::paginate(25);
 
         return view('admin.posts.index', [
             'element' => $element,

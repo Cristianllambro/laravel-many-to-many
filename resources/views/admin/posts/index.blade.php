@@ -18,7 +18,7 @@
                 <select name="users" id="users">
                     <option value="">Select Users</option>
                     @foreach ($user as $item)
-                        <option value="{{$item->id}}">{{$item->name}}</option>
+                        <option value="{{$item->id}}" @if($item->id == $request->item) selected @endif>{{$item->name}}</option>
                     @endforeach
                 </select>
             </div>
@@ -28,7 +28,7 @@
                 <select name="category" id="category">
                     <option value="">Select Category</option>
                     @foreach ($categories as $item)
-                        <option value="{{$item->id}}">{{$item->name}}</option>
+                        <option value="{{$item->id}}"  @if($item->id == $request->item) selected @endif>{{$item->name}}</option>
                     @endforeach
                 </select>
 
@@ -39,6 +39,7 @@
             </div>
         </form>
 
+        {{-- CARD POST --}}
         @foreach ($element as $item)
             <div class="col-4">
                 <div class="card h-100" style="width: 22rem;">
